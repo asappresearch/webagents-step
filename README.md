@@ -1,4 +1,4 @@
-# HeaP: Hierarchical Policies for Web Actions using LLMs
+# SteP: Stacked LLM Policies for Web Actions
 
 ## Installation
 
