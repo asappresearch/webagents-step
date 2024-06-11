@@ -24,11 +24,11 @@ pip install -r requirements.txt
 
 We break down the success rates across different websites and provide links to the trajectory logs below, containing the observations, model predictions, and evaluator outputs for each task.
 
-We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest WebArena code and will be updating the table below,
+We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest WebArena code (last commit May 29, 2024) and will be updating the table below,
 
 | Website | Number of tasks              | Success Rate | Trajectory Logs             |
 |---------|--------------------|--------------|------------------|
-| Reddit  |  | 57.2%        | [logs](https://drive.google.com/drive/folders/1M-DueSBSTs7PKeexreTsvqDIT5fboqBv?usp=sharing) |
+| Reddit  |  | 57.55%        | [logs](https://drive.google.com/drive/folders/1M-DueSBSTs7PKeexreTsvqDIT5fboqBv?usp=sharing) |
 | Gitlab  |  | TBD       | |
 | Shopping  |  | TBD       | |
 | Shopping admin (CMS)  |  | TBD        |  |
