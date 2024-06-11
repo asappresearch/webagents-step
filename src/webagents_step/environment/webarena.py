@@ -7,7 +7,7 @@ os.environ[
 ] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:7780/admin"
 os.environ[
     "REDDIT"
-] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:9999"
+] = "https://webarena-env-reddit.awsdev.asapp.com"
 os.environ[
     "GITLAB"
 ] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:8023/"
@@ -57,6 +57,7 @@ class WebArenaEnvironmentWrapper(WebEnvironment):
         self.steps = 0
         self.is_done = False
         self.reward = 0.0
+        self.action_limit_exceeded = False
         
         self.trajectory: Trajectory = []
         self.update_webarena_metrics()
@@ -87,7 +88,7 @@ class WebArenaEnvironmentWrapper(WebEnvironment):
         return False
     
     def status(self):
-        return {'done': self.is_done, 'reward': self.reward, 'success': float(self.reward > 0), 'num_actions': self.steps}
+        return {'done': self.is_done, 'reward': self.reward, 'success': float(self.reward > 0), 'num_actions': self.steps, 'action_limit_exceeded': self.action_limit_exceeded}
 
     def step(self, action):
         self.steps = self.steps + 1
@@ -95,6 +96,7 @@ class WebArenaEnvironmentWrapper(WebEnvironment):
         
         if self.steps > self.max_steps:
             print(f"Steps {self.steps} exceeded maximum {self.max_steps}")
+            self.action_limit_exceeded = True
             self.is_done = True
             action_cmd = create_id_based_action("stop [N/A]")
             self.update_webarena_metrics(action_cmd)

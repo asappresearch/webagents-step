@@ -13,7 +13,7 @@ from typing import List
 import shutil
 
 import openai
-from browser_env import ScriptBrowserEnv
+import time
 
 from webagents_step.utils.data_prep import *
 from webagents_step.agents.prompt_agent import PromptAgent
@@ -130,6 +130,9 @@ def run():
                 summary_file=summary_file,
                 summary_data=summary_data,
             )
+            
+        # For reddit: Sleep for 21 minutes (720 seconds) 
+        # time.sleep(1260)
     
 if __name__ == "__main__":
     run()

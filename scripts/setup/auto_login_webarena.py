@@ -13,19 +13,20 @@ os.makedirs('./.auth', exist_ok=True)
 
 
 SLEEP = 1.5
+
 # set the URLs of each website, we use the demo sites as an example
 os.environ[
     "SHOPPING"
-] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:7770"
+] = "https://webarena-env-shopping.awsdev.asapp.com"
 os.environ[
     "SHOPPING_ADMIN"
-] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:7780/admin"
+] = "https://webarena-env-shopping.awsdev.asapp.com/admin"
 os.environ[
     "REDDIT"
-] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:9999"
+] = "https://webarena-env-reddit.awsdev.asapp.com"
 os.environ[
     "GITLAB"
-] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:8023/"
+] = "https://webarena-env-github.awsdev.asapp.com"
 os.environ[
     "MAP"
 ] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:3000"
@@ -45,7 +46,7 @@ from browser_env.env_config import (
     SHOPPING_ADMIN,
 )
 
-HEADLESS = True
+HEADLESS = False
 SLOW_MO = 0
 
 
@@ -104,6 +105,7 @@ def renew_comb(comb: list[str], auth_folder: str = "./.auth") -> None:
     if "reddit" in comb:
         username = ACCOUNTS["reddit"]["username"]
         password = ACCOUNTS["reddit"]["password"]
+        page.goto(f"{REDDIT}/registration")
         page.goto(f"{REDDIT}/login")
         page.get_by_label("Username").fill(username)
         page.get_by_label("Password").fill(password)
