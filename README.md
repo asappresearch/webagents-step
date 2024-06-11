@@ -28,10 +28,10 @@ We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest We
 
 | Website | Number of tasks              | Success Rate | Trajectory Logs             |
 |---------|--------------------|--------------|------------------|
-| Reddit  |  | 59.4%        | [logs](link) |
+| Reddit  |  | 57.2%        | [logs](https://drive.google.com/drive/folders/1M-DueSBSTs7PKeexreTsvqDIT5fboqBv?usp=sharing) |
 | Gitlab  |  | TBD       | |
 | Shopping  |  | TBD       | |
-| Shopping admin (CMS)  |  | 20.9%        | [logs](link) |
+| Shopping admin (CMS)  |  | TBD        |  |
 | Maps  |  | TBD       | |
 | Multisite  |  |   TBD    | |
 
