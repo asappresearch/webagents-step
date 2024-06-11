@@ -1,0 +1,24 @@
+numpy==1.26.2
+pandas==2.1.3
+torch==2.1.1
+openai
+transformers==4.30
+datasets==2.10.1
+bert-score==0.3.13
+bitsandbytes==0.37.2
+playwright==1.32.1
+beautifulsoup4
+colorama
+matplotlib==3.8.2
+tensorboard==2.15.1
+requests
+tqdm>=4.31.1
+gradio==4.7.1
+huggingface-hub==0.17.3
+setuptools==69.0.2
+peft @ git+https://github.com/huggingface/peft.git@b4faffea8ae031e5bd69a76b55418b3650c04c80
+accelerate==0.24.0
+ctranslate2
+PyYAML==6.0.1
+sentencepiece==0.1.97
+tiktoken

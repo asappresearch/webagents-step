@@ -140,6 +140,6 @@ api_key.py
 
 # Data files
 *.csv
-*.txt
+# *.txt
 
 *chrome*
