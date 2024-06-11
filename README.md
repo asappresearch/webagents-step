@@ -28,12 +28,13 @@ We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest We
 
 | Website | Number of tasks              | Success Rate | Trajectory Logs             |
 |---------|--------------------|--------------|------------------|
-| Reddit  |  | 57.55%        | [logs](https://drive.google.com/drive/folders/1M-DueSBSTs7PKeexreTsvqDIT5fboqBv?usp=sharing) |
+| Reddit  |  | 57.5%        | [logs](https://drive.google.com/drive/folders/1M-DueSBSTs7PKeexreTsvqDIT5fboqBv?usp=sharing) |
 | Gitlab  |  | TBD       | |
 | Shopping  |  | TBD       | |
 | Shopping admin (CMS)  |  | TBD        |  |
 | Maps  |  | TBD       | |
 | Multisite  |  |   TBD    | |
+| All  |  |   TBD    | |
 
 
 ### Installing WebArena
@@ -68,3 +69,6 @@ To run MiniWoB++ evaluation:
 ```bash
 python scripts/evaluate/eval_miniwob.py --config configs/miniwob/eval_openai_agent.yml
 ```
+
+## Contact
+This project is still in active development. For any questions or issues, please contact us at [psodhi@asapp.com](mailto:psodhi@asapp.com).
