@@ -28,13 +28,12 @@ We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest We
 
 | Website | Number of tasks              | Success Rate | Trajectory Logs             |
 |---------|--------------------|--------------|------------------|
-| Reddit  |  | 57.5%        | [logs](https://drive.google.com/drive/folders/1M-DueSBSTs7PKeexreTsvqDIT5fboqBv?usp=sharing) |
+| Reddit  |  | 59.4%        | [logs](https://drive.google.com/drive/folders/1Ek9cMz344tKXbEchakPyPXoTU14FYSlm?usp=share_link) |
 | Gitlab  |  | TBD       | |
 | Shopping  |  | TBD       | |
 | Shopping admin (CMS)  |  | TBD        |  |
-| Maps  |  | TBD       | |
+| Maps  |  | 30.3%       | [logs](https://drive.google.com/drive/folders/1V7c122QKNAIVdbskLFNwTJcwILGIf_kS?usp=share_link)|
 | Multisite  |  |   TBD    | |
-| All  |  |   TBD    | |
 
 
 ### Installing WebArena
@@ -54,7 +53,7 @@ python scripts/evaluate/eval_webarena.py --config configs/webarena/eval_openai_a
 ```
 
 Important:
-* Set up each website as a docker as listed in WebArena instructions.
+* Set up each website as a docker as listed in [WebArena instructions](https://github.com/web-arena-x/webarena/blob/main/environment_docker/README.md)
 * Reset the website state before running an evaluation. This matters since the initial state of the website affects the success of the task.
 * For Reddit tasks, there is a rate limit on making more than 3 posts in an hour. You need to add a sleep of 21 minutes before every new task. This can be done by adding `time.sleep(1260)` inside the for loop in `eval_webarena.py`
 
