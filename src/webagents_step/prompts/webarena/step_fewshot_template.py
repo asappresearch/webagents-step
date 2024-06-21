@@ -713,9 +713,9 @@ You need to generate a response in the following format. Please issue only a sin
 Please follow these general instructions:
 1. If you have a task like "Show me the email address of the customer who is the most unhappy with X product", you MUST use find_customer_review [Show me customer reviews for X products] to locate that particular review and you can then find whatever information you need. Do not try to solve the task without using the subroutine as it contains specific instructions on how to solve it. 
 2. If you have a task like "Show me the customers who have expressed dissatisfaction with X product", you MUST use find_customer_review [Show me customer reviews for X product]. 
-3. If you have a task about a particular order, e.g. "Notify X in their most recent pending order with message Y", you MUST use find_order [Most recent pending order for X] to locate the order, and then do operations on that page. 
+3. If you have a task about a particular order, e.g. "Notify X in their most recent pending order with message Y", you MUST use find_order [Most recent pending order for X] to locate the order, and then do operations on that page. Do this even if the order is visible in the current page.
 4. To write a comment on the order page, you MUST scroll[down] till you find the Comment section. You MUST NOT click on "Comments History" tab, it does not lead you to the right place. Stay on the current page and scroll down to see the comment section.
-5. If you have a task about a particular order, e.g. "Cancel order 305", you MUST use find_order [Find order 305] to locate the order, and then do operations on that page.
+5. If you have a task about a particular order, e.g. "Cancel order X", you MUST use find_order [Find order X] to locate the order, and then do operations on that page.
 6. If you have a task like "Find the customer name and email with phone number X", you MUST use search_customer [Search customer with phone number X] to locate the customer, and then answer the query. Do NOT click on CUSTOMERS side panel.
 7. You MUST use Subroutine Actions whenever possible.
 """,
@@ -729,6 +729,8 @@ URL:
 {url}
 PREVIOUS ACTIONS:
 {previous_actions} 
+
+In your REASON, you MUST specify if any of the general instructions above apply that would affect the action you choose.
 """,
 
 "response": "",
@@ -823,6 +825,7 @@ The actions you can perform fall into several categories:
 Page Operation Actions:
 `click [id]`: This action clicks on an element with a specific id on the webpage.
 `type [id] [content] [press_enter_after=0|1]`: Use this to type the content into the field with id. By default, the "Enter" key is pressed after typing unless press_enter_after is set to 0.
+`scroll [direction=down|up]`: Scroll the page up or down.
 
 Completion Action:
 `stop [answer]`: Issue this action when you believe the task is complete. If the objective is to find a text-based answer, provide the answer in the bracket. If you believe the task is impossible to complete, provide the answer as "N/A" in the bracket.
@@ -831,6 +834,7 @@ Example actions:
 click [7]
 type [7] [Zoe] [1]
 stop [N/A]
+scroll [down]
 
 You will be provided with the following,
 OBJECTIVE:
@@ -849,12 +853,16 @@ ACTION:
 Your action
 
 Please follow these instructions to solve the subtask:
-1. The objective find_order [query] asks you to navigate to the order page corresponding to the query 
-2. To navigate to orders, first click on SALES in the side panel
-3. Once you have clicked on SALES, click on Orders. 
-4. Once you are in the orders page, you have to use the 'Search by keyword' text box to search for your order. Always be sure to search first. For example, for find_order [Most recent pending order by Sarah Miller], search Sarah Miller. 
-5. Click on View to open the right order.
-6. Once you are in the order page, as noted by "Order & Account Information", you MUST return stop [N/A] to hand back control to the agent that queried you. Do not go back to another page. 
+* The objective find_order [query] asks you to navigate to the order page corresponding to the query 
+* To navigate to orders, first go to SALES in the side panel
+* Once you have clicked on SALES, go to Orders
+* Once you are in the orders page, you have to use the 'Filter' button to filter down to desired criteria
+* Desired criterias include filtering down to a specific order ID field or Name field. ONLY use fields that are in the objective
+* You MUST use Filter to find orders instead of using the search bar
+* If there are any active filters, be sure to clear them before entering your filter criteria
+* In your filtered list of orders, if you don't find the desired order, make sure to scroll down till you find the order or reach end of page (typically indicated by 'Copyright © ...' in the observation)
+* Once you have found the order, go to View to open the order
+* Once you are in the desired order page (as noted by "Order & Account Information") you MUST return stop [N/A] to hand back control to the agent that queried you. Do not go back to another page. 
 """,
 
 "input": """
