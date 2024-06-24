@@ -12,7 +12,7 @@ Completion Action:
 
 Subroutine Actions:
 `find_commits [query]`: Given you are in a project page, this subroutine searches Gitlab for commits made to the project and retrieves information about a commit. This function returns the answer to the query.
-`search_issues [query]`: Given you are in my issue page, this subroutine searches Gitlab to find issue that matches the query. Any objective that says "openn my latest issue" or "open issue with <keyword> in the title" must be passed through this subroutine.
+`search_issues [query]`: Use this subroutine to find an issue on Gitlab. Any objective that requires finding an issue as an intermediate step, e.g. open latest issue, open issue with <keyword> and check for X, should call this subroutine
 `create_project [query]`: Given you are in the create new project page, this subroutine completes the act of creating a project, adding members etc. 
 `create_group [query]`: Given you are in the create new group page, this subroutine completes the act of creating a group, adding members etc. 
 
@@ -42,10 +42,16 @@ You need to generate a response in the following format. Please issue only a sin
 	ACTION:
 	Your action
  
-Please follow these general instructions:
-
-* Use responses from your subroutine calls to answer the objective. The PREVIOUS ACTIONS section lists all previous actions and their corresponding responses. For instance, an entry of 1 = find_commits [query] implies that the find_commits subroutine you invoked returned a response of 1. Use that response to solve the objective.
+Please follow these GENERAL INSTRUCTIONS:
+* PREVIOUS ACTIONS contains previous actions and subroutine calls with corresponding responses, e.g. 1 = find_commits [query] implies that find_commits subroutine returned a response of 1 commit
+* USE the responses from your subroutine. Do NOT try to solve the subroutine objective again by yourself
+* DO NOT count commits yourself. Return the response from find_commits in PREVIOUS ACTIONS, e.g. 1 = find_commits [query] implies you should return stop [1]
 * If the subroutine returns a response, e.g. Open = search_issues [query], and you have to issue a stop, then issue the same format as that of the response, e.g. stop [Open]
+* If the objective is to check if an issue, pull request, etc is open or closed, respond as though you are answering the question, e.g. "No, it is open", "Yes, it is closed"
+* To access all public projects, you need to navigate to Explore
+* In a repository page, every repository has 4 metrics listed in order Stars, Forks, Merge Requests, and Issues.
+* If a project does not exist, then you cannot do any operations on it like cloning it or creating issues etc.  
+* The command to clone a project is git clone [project URL]
 """,
 
 "input": """
@@ -57,6 +63,8 @@ URL:
 {url}
 PREVIOUS ACTIONS:
 {previous_actions} 
+
+In your REASON, you MUST specify if any of the subroutine actions or GENERAL INSTRUCTIONS apply and how that affects the action you choose.
 """,
 
 "response": "",
@@ -101,6 +109,35 @@ ACTION:
 find_commits [How many commits did Mike Perotti make to diffusionProject on 03/23/2023?]
 """
 },
+{
+    "input": """ 
+OBJECTIVE:
+How many stars does  a11y-webring.club have?
+OBSERVATION:
+    	[1258] link 'A'
+		[1248] heading 'Byte Blaze / a11y-webring.club'
+			[1831] link 'Byte Blaze / a11y-webring.club'
+		[1683] generic 'Public - The project can be accessed without any authentication.'
+		[1673] StaticText 'Owner'
+		[1241] generic 'globe with meridians'
+			[1684] StaticText '🌐'
+		[1771] StaticText ' A webring for digital accessibility practitioners.'
+		[1726] link '2'
+		[1463] link '0'
+		[1325] link '1'
+		[1784] link '4'
+URL:
+https://webarena-env-github.awsdev.asapp.com/
+PREVIOUS ACTIONS:
+
+""",
+"response": """
+REASON:
+Every repository has 4 metrics listed in order Stars, Forks, Merge Requests, and Issues. Hence, [1726] link '2' suggests 2 stars. 
+ACTION:
+stop [2]
+"""    
+}
 ]
 }
 
@@ -137,6 +174,13 @@ You need to generate a response in the following format. Please issue only a sin
 	Your reason for selecting the action below
 	ACTION:
 	Your action
+ 
+Please follow these general instructions:
+* To find a list of all commits, you must navigate to the commits section of the repository
+* Look at the first and last date in your observation to know if the desired date is in the range
+* If it's in the range but not visible, that means no commits were made on that date
+* If the date is outside of the range, you need to scroll up/down to get to the desired date range. Scrolling down takes you to a date earlier in time (e.g. Feb 2023 is earlier in time than Mar 2023)
+* To count commits from a specific author, count the number of times their avatar (e.g. img "<author> avatar") appears in the observation. 
 """,
 
 "input": """
@@ -148,55 +192,46 @@ URL:
 {url}
 PREVIOUS ACTIONS:
 {previous_actions} 
+
+In your REASON, you MUST specify if any of the general instructions or examples apply and how that affects the action you choose.
 """,
 
 "response": "",
 
 "examples": [
 {
-"input": """
-OBJECTIVE:
-find_commits [How many commits did Mike Perotti make to diffusionProject on 03/23/2023?]
-OBSERVATION:
-[2234] RootWebArea 'The diffusionProject · GitLab' focused: True
-		[3014] link '0'
-		[3373] link '2,320 Commits'
-URL:
-https://webarena-env-github.awsdev.asapp.com/
-PREVIOUS ACTIONS:
-
-""",
-"response": """
-REASON:
-Let's think step-by-step. To find the number of commits made by Mike Perotti on a specific date, I need to navigate to the commits section of the repository. The link with the text '2,320 Commits' suggests that it leads to the commit history. Therefore, I will click on this link to proceed to the commits section. In summary, the next action I will perform is ```click [3373]```
-ACTION:
-click [3373]
-"""},
-{
 "input": """ 
 OBJECTIVE:
-find_commits [How many commits did Mike Perotti make to diffusionProject on 03/23/2023?]
+find_commits [How many commits did Mike Perotti make to diffusionProject on 02/02/2023?]
 OBSERVATION:
-[11361] StaticText '23 Mar, 2023'
-[11364] StaticText '3 commits'
-[11366] link "Emily Brick's avatar"
-[11369] link 'Coverage improvements (#449)'
-[11371] button 'Toggle commit description'
-[11380] link 'Emily Brick'
-[11382] time 'Mar 23, 2023 7:58pm EDT'
-[11440] link 'Browse Files'
-[11451] link "Mike Perrotti's avatar"
-[11454] link 'updates guidance about numeric table values to be more specific (#451)'
-[11459] link 'Mike Perrotti'
-[11460] StaticText ' authored '
-[11461] time 'Mar 23, 2023 2:58pm EDT'
-[13266] button 'Unverified'
-[11470] StaticText 'da9575e5'
-[11469] link 'Browse Files'
-[11480] link "Cole Bemis's avatar"
-[11483] link 'Add SSR compatibility to component lifecycle criteria (#440)'
-[11494] link 'Cole Bemis'
-[11496] time 'Mar 22, 2023 2:40pm EDT'
+[8420] StaticText '02 Feb, 2023'
+    [8423] StaticText '3 commits'
+    [8426] img "Mike Perrotti's avatar"
+    [8428] link 'Coverage improvements (#449)'
+    [8433] link 'Mike Perrotti'
+    [8434] StaticText ' authored '
+    [8435] time 'Feb 1, 2023 10:43pm EST'
+        [8437] StaticText '1 year ago'
+    [10354] button 'Unverified'
+    [8444] StaticText 'a323cbb6'
+    [8442] button 'Copy commit SHA' live: polite atomic: False relevant: additions text
+    [8443] link 'Browse Files'
+    [8455] img "Mike Perrotti's avatar"
+    [8457] link 'updates guidance about numeric table values to be more specific (#451)
+    [8462] link 'Mike Perrotti'
+    [8463] StaticText ' authored '
+    [8464] time 'Feb 1, 2023 10:26pm EST'
+        [8466] StaticText '1 year ago'
+    [10356] button 'Unverified'
+    [8473] StaticText '9bf4ae35'
+    [8471] button 'Copy commit SHA' live: polite atomic: False relevant: additions text
+    [8472] link 'Browse Files'
+    [8484] img "Emily Brick's avatar"
+    [8486] link 'Correct typos on Contributing Guidelines and Follow (#1518)'
+    [8491] link 'Emily Brick'
+    [8492] StaticText ' authored '
+    [8493] time 'Feb 1, 2023 7:40pm EST'
+        [8495] StaticText '1 year ago'
 URL:
 https://webarena-env-github.awsdev.asapp.com/
 PREVIOUS ACTIONS:
@@ -206,11 +241,12 @@ scroll [down]
 """,
 "response": """
 REASON:
-Let's think step-by-step. I have already clicked on the link for commits. 
-From the browser content, I can see this is a list of commits for the diffusionProject. 
-I see that there has been 3 commits on 03/23/2023. I see that Mike Perrotti made 1 commit on Mar 23, 2023 2:58pm EDT. In summary, the next action I will perform is ```stop [1]```
+The objective is to find how many commits Mike Perotti made on Feb 2, 2023. I see that there has been 3 commits on 02 Feb, 2023.
+However, I must count number of times img "Mike Perrotti's avatar" appears. 
+I see [8426] img "Mike Perrotti's avatar", [8455] img "Mike Perrotti's avatar". 
+Counting this leads to 2 commits made by Mike Perotti. In summary, the next action I will perform is ```stop [2]```
 ACTION:
-stop[1]
+stop [2]
 """
 },
 ]
@@ -248,6 +284,14 @@ REASON:
 Your reason for selecting the action below
 ACTION:
 Your action
+
+Please follow these general instructions:
+* First navigate the Issues page
+* Once you are in the Issues page, you MUST first navigate to all issues so that you see both open and closed issues for solving the objective
+* You may not see all issues listed at once, use the search bar to search for appropriate keywords and filter down to relevant set of issues
+* If the objective says to "Open ... issue, check if it is X", you must first open the specific issue page by clicking it. Do not stop [] until you have navigated to the specific issue page.
+* Once you are on the issue page, return the appropriate status
+* In your status, if the objective is to check if an issue is open or clossed, respond as though you are answering a question, e.g. "No, it is open", "Yes, it is closed"
 """,
 
 "input": """
@@ -260,12 +304,7 @@ URL:
 PREVIOUS ACTIONS:
 {previous_actions} 
 
-Please follow these general instructions:
-1. By default you begin with the page containing all open issues. If the objective requires you to search over all issues,  e.g. "Open my latest updated issue ... check if closed", make sure that you navigate to the page containing "all issues"".
-2. If the objective says "Open ... issue to check if it is closed", this means:
-a. First open the issue being referred to by clicking on it
-b. Then return the status, i.e. stop [open], stop [closed].
-Do not return stop [] until you are sure that you have clicked on the issue.
+In your REASON, you MUST specify if any of the general instructions or examples apply and how that affects the action you choose.
 """,
 
 "response": "",
