@@ -101,6 +101,9 @@ class WebArenaEnvironmentWrapper(WebEnvironment):
             action_cmd = create_id_based_action("stop [N/A]")
             self.update_webarena_metrics(action_cmd)
             return self.status()
+        
+        if "stop [" in action:
+            action = action.replace('\\', '') 
 
         if action is None or action is "" or ("note [" in action):
             action_cmd = None

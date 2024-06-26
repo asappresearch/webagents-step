@@ -1025,30 +1025,21 @@ You need to generate a response in the following format. Please issue only a sin
 	ACTION:
 	Your action
 
-Please follow these general instructions:
-1. First check the OBJECTIVE. If the OBJECTIVE is a question about my orders, you MUST use search_order [question] to answer the question. For example, 
-a. search_order [How much I spend on ...?]
-b. search_order [What is the size of the picture frame I bought Sep 2022?]
-c. search_order [Change the delivery address for my most recent order]
-Do not click on MyAccount directly!
-Do not try to solve the task without using search_order as it contains specific instructions on how to solve it.
-2. Once you call the search_order [] subroutine, the response is stored in PREVIOUS ACTIONS. For example, 
-$0 = search_order [How much I spend on 4/19/2023 on shopping at One Stop Market?]
-means that the response was $0. In that case, return the answer directly, e.g. stop [$0]
-If the response was N/A, reply stop [N/A]
-3.  If the OBJECTIVE is a question about listing / showing products, you MUST use list_products. For example,
-a. list_products [List products from PS4 accessories category by ascending price]
-b.  list_products [Show me the most expensive product from skin care tool category]
-4. If the OBJECTIVE requires you to retrieve details about a particular order you placed liked SKU, you MUST first use search_order [] to retrieve the SKU
-a. If the OBJECTIVE is "Fill the "contact us" form in the site for a refund on the bluetooth speaker I bought ... Also, ensure to include the order number #161 and the product SKU."
-you must first issue search_order [Give me the SKU of bluetooth speaker from order number #161]. When filling out the form, avoid qualifiers like "just".
-b. If the OBJECTIVE is "Draft a refund message via their "contact us" form for the phone screen protector I bought March 2023. It broke after three days of use. The shop requires the order id, the reason and the amount to refund in the message."
-you must first issue search_order [Give me the order id and the amount for the phone screen protector I bought March 2023.]
-5. To find the Contact Us link, scroll down in any page till you see it.
-6. If the OBJECTIVE is about reviews for the product, you MUST use search_reviews. For example,
-a. search_reviews [List out reviewers, if exist, who mention about ear cups being small]
-b. search_reviews [What are the main criticisms of this product? Please extract the relevant sentences]
-7. In your REASON, you MUST specify if any of the general instructions above apply that would affect the action you choose.
+Please follow these GENERAL INSTRUCTIONS:
+* If the OBJECTIVE is a question about my orders, you MUST use search_order [question] to answer the question e.g. How much did I spend on X, or What is the size of X that I bought, or Change the delivery address for X. 
+Do not try to solve the task without using search_order as it contains specific instructions on how to solve it. Do not click on MyAccount directly.
+* The response from subroutines is stored in PREVIOUS ACTIONS. For example, $0 = search_order [How much I spend on X?] means that the response was $0. In that case, return the answer directly, e.g. stop [$0]. If the response was N/A, reply stop [N/A]. Trust the answer returned by search_order. 
+* If the OBJECTIVE is a question about listing / showing products, you MUST use list_products. For example,
+list_products [List products from X]
+list_products [Show me the most expensive product from X]
+* If the OBJECTIVE requires you to retrieve details about a particular order you placed liked SKU, you MUST first use search_order [] to retrieve the SKU.
+For example, if the OBJECTIVE is "Fill the form for a refund on X .... Also, ensure to include the order number #161 and the product SKU.", you must first issue search_order [Give me the SKU of X from order number #161]. 
+* If the OBJECTIVE requires order id and amount, you must first issue search_order [Give me the order id and the amount for X]
+* If the OBJECTIVE is about reviews for the product, you MUST use search_reviews. For example, search_reviews [List out reviewers ..] or search_reviews [What are the main criticisms of X]
+* Return the response from search_reviews VERBATIM. Trust that it has solved the OBJECTIVE correctly.
+* When filling out a form for refund, you must mention the word refund. Also, you MUST NOT use the word "just" or "which". This is against formatting guidelines. E.g. say "It broke after three days" rather than "which broke after just three days" or "The product broke after three days".
+* The Contact Us link is usually at the bottom of a page, scroll down to find it. 
+* If the OBJECTIVE asks you to "Draft" something, perform all necessary actions except submitting at the end. Do NOT submit as this is a draft.
 """,
 
 "input": """
@@ -1060,6 +1051,8 @@ URL:
 {url}
 PREVIOUS ACTIONS:
 {previous_actions} 
+
+In your REASON, you MUST specify if any of the subroutine actions or GENERAL INSTRUCTIONS apply and how that affects the action you choose.
 """,
 
 "response": "",
@@ -1104,7 +1097,7 @@ Your reason for selecting the action below
 ACTION:
 Your action
 
-Please follow these instructions to solve the subtask:
+Please follow these GENERAL INSTRUCTIONS:
 * Navigate to My Account, then My Orders to access all orders.
 * The orders are sorted by descending date. Click on Page Next to go to a earlier date. Click on Page Previous to go to a earlier date.
 If you don't see an order for a date, and the first order on the page is after the date, the last order on the page is before the date, then it means there is no order for the date.
@@ -1130,7 +1123,9 @@ OBSERVATION:
 URL:
 {url}
 PREVIOUS ACTIONS:
-{previous_actions} 
+{previous_actions}
+
+In your REASON, you MUST specify if any of the GENERAL INSTRUCTIONS apply and how that affects the action you choose. 
 """,
 
 "response": "",
@@ -1251,13 +1246,11 @@ Your action
 Please follow these instructions to solve the subtask:
 * If you are not in the product page, you can search for the product using the search bar.
 * To find the list of reviews, search for a link with Reviewers. If you can't find it, scroll down to search for it.
-* Not all reviews will be visible on the reviews page. You MUST scroll down till you reach the end of the page. 
-* You will know that you have reached the end of the page if you see “Contact Us” in the OBSERVATION.
-* As you scroll through the reviews, record each relevant review using the action, note [review]. Important: Only note the sentences in the review that are relevant to the OBJECTIVE. Copy the rest of the sentences VERABITM, separating each sentence by a delimeter.
-* In your REASONS, justify which sentences you selected to note as being relevant to the OBJECTIVE.
-* After scrolling through all reviews, look at your PREVIOUS ACTIONS to see the list of notes you have collected
-* Combine the list of all notes into a concatenated text all_reviews and return these using the action stop [all_reviews].
-* Important: When returning stop [all_reviews], make sure every word in all_reviews is gramatically correct. Words that are joined together should be separate. Drop any sentence in the review that is not relevant to the OBJECTIVE. 
+* Iterate over all reviews. For every relevant review, make a note [reviewer_name: review_info]. Record the relevant reviewer_name and review VERBATIM. Once you are done with all the reviews in a page, scroll down to access more reviews.  
+* Refer to PREVIOUS ACTIONS to know which reviews you have noted already. If you have noted a review already, look for the next review in your current OBSERVATION or scroll down. 
+* Do NOT repeat the note [] action for the same review.   
+* Not all reviews will be visible on the reviews page. You MUST scroll down till you reach the end of the page. You will know that you have reached the end of the page if you see “Contact Us” in the OBSERVATION.
+* Once you have scrolled through all reviews, combine all your noted reviews that you can find under PREVIOUS ACTIONS. To combine, create a list of dicts where every dict has a name and review key. Be sure to capture ALL the reviews in your note. Return that as stop [{name: reviewer_name_1, review: review_1}, {name: reviewer_name_2, review: review_2}, ..] 
 """,
 
 "input": """
@@ -1269,6 +1262,8 @@ URL:
 {url}
 PREVIOUS ACTIONS:
 {previous_actions} 
+
+In your REASON, you MUST specify if any of the general instructions apply and how that affects the action you choose.
 """,
 
 "response": "",
