@@ -28,11 +28,11 @@ We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest We
 
 | Website | Number of tasks              | Success Rate | Trajectory Logs             |
 |---------|--------------------|--------------|------------------|
-| Reddit  | 106 | 59.4%        | [logs](https://drive.google.com/drive/folders/1Ek9cMz344tKXbEchakPyPXoTU14FYSlm?usp=share_link) |
-| Map  | 109 | 30.3%       | [logs](https://drive.google.com/drive/folders/1V7c122QKNAIVdbskLFNwTJcwILGIf_kS?usp=share_link) |
 | Gitlab  | 180 | 31.7%       | [logs](https://drive.google.com/drive/folders/1znkg8aQoEVLTvSyQ8iebb_bsOJL2DrKl?usp=share_link) |
+| Reddit  | 106 | 59.4%        | [logs](https://drive.google.com/drive/folders/1Ek9cMz344tKXbEchakPyPXoTU14FYSlm?usp=share_link) |
 | Shopping  | 187 | 36.9%       | [logs](https://drive.google.com/drive/folders/1ztCP7JH18XS_mGlPCIrP7cKc2eF6Yf8S?usp=share_link) |
 | Shopping admin (CMS)  | 182 |   24.2%   | [logs](https://drive.google.com/drive/folders/1quti9851rBO49alYYL9C1NZNcpRI_Cg-?usp=share_link) |
+| Map  | 109 | 30.3%       | [logs](https://drive.google.com/drive/folders/1V7c122QKNAIVdbskLFNwTJcwILGIf_kS?usp=share_link) |
 | Multisite  | 48 |   12.5%    | [logs](https://drive.google.com/drive/folders/1JmvrY1Ys_bHHY8eQmJocnyZGiPeG7BpV?usp=share_link) |
 | All  | 812 |   33.5%    | [logs](https://drive.google.com/drive/folders/1AKXlClGbFU4RQtfWN9f6jva7MbbGCbur?usp=share_link) |
 
