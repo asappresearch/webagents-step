@@ -24,7 +24,7 @@ pip install -r requirements.txt
 
 We break down the success rates across different websites and provide links to the trajectory logs below, containing the observations, model predictions, and evaluator outputs for each task.
 
-We are generating new runs with the `gpt-4-turbo-2024-04-09` model and latest WebArena code (last commit May 29, 2024) and will be updating the table below,
+The latest runs with `gpt-4-turbo-2024-04-09` model and WebArena code (last commit May 29, 2024) are linked below
 
 | Website | Number of tasks              | Success Rate | Trajectory Logs             |
 |---------|--------------------|--------------|------------------|
@@ -44,6 +44,8 @@ Generate test data configs:
 python scripts/generate_test_data.py
 ```
 You will see `*.json` files generated in config_files/ folder. Copy these over to a `tasks/webarena` directory in the `webagents-step/` root directory.
+
+You will also need to setup authentication for all websites as per instructions in the WebArena README (See instructions for *Obtain the auto-login cookies for all websites*). This will generate a `.auth` folder. Copy this over to `webagents-step/` root directory.
 
 ### Running Evaluation
 
